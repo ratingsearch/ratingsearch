@@ -4,10 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>レイティング検索</title>
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@2.0.1/dist/chartjs-plugin-zoom.min.js"></script>
-
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=DM+Mono:wght@400;500&display=swap');
 
@@ -24,377 +21,97 @@
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
 
-body {
-  font-family: 'Noto Sans JP', sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  min-height: 100vh;
-}
+header { background: var(--hdr); padding: 20px 24px; display: flex; align-items: center; gap: 12px; }
+.logo { width: 36px; height: 36px; background: var(--accent); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+.header-text h1 { font-size: 16px; font-weight: 700; color: white; letter-spacing: .04em; }
+.header-text p { font-size: 11px; color: #9ca3af; margin-top: 2px; }
 
-header {
-  background: var(--hdr);
-  padding: 20px 24px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
+.container { max-width: 800px; margin: 0 auto; padding: 24px 16px; }
 
-.logo {
-  width: 36px;
-  height: 36px;
-  background: var(--accent);
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 20px;
-  flex-shrink: 0;
-}
-
-.header-text h1 {
-  font-size: 16px;
-  font-weight: 700;
-  color: white;
-  letter-spacing: .04em;
-}
-
-.header-text p {
-  font-size: 11px;
-  color: #9ca3af;
-  margin-top: 2px;
-}
-
-.container {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 24px 16px;
-}
-
-.search-card {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 24px;
-  margin-bottom: 20px;
-}
-
-.search-card h2 {
-  font-size: 14px;
-  font-weight: 700;
-  color: var(--text2);
-  letter-spacing: .08em;
-  text-transform: uppercase;
-  margin-bottom: 16px;
-}
-
-.search-row {
-  display: flex;
-  gap: 10px;
-}
-
-.search-row input {
-  flex: 1;
-  padding: 12px 16px;
-  border: 1.5px solid var(--border);
-  border-radius: 10px;
-  font-size: 16px;
-  font-family: 'DM Mono', monospace;
-  color: var(--text);
-  background: white;
-  outline: none;
-  transition: border-color .2s;
-}
-
+.search-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 24px; margin-bottom: 20px; }
+.search-card h2 { font-size: 12px; font-weight: 700; color: var(--text2); letter-spacing: .08em; text-transform: uppercase; margin-bottom: 16px; }
+.search-row { display: flex; gap: 10px; }
+.search-row input { flex: 1; padding: 12px 16px; border: 1.5px solid var(--border); border-radius: 10px; font-size: 16px; font-family: 'DM Mono', monospace; color: var(--text); background: white; outline: none; transition: border-color .2s; }
 .search-row input:focus { border-color: var(--accent); }
-
-.search-row input::placeholder {
-  color: #c0c8d8;
-  font-family: 'Noto Sans JP', sans-serif;
-  font-size: 14px;
-}
-
-.type-row {
-  display: flex;
-  gap:  8px;
-  margin-top: 12px;
-}
-
-.type-btn {
-  padding: 7px 16px;
-  border-radius: 20px;
-  border: 1.5px solid var(--border);
-  background: white;
-  font-size: 13px;
-  font-weight: 500;
-  cursor: pointer;
-  font-family: 'Noto Sans JP', sans-serif;
-  color: var(--text2);
-  transition: all .15s;
-}
-
-.type-btn.active {
-  background: var(--accent);
-  border-color: var(--accent);
-  color: white;
-}
-
-.btn-search {
-  padding: 12px 24px;
-  background: var(--accent);
-  color: white;
-  border: none;
-  border-radius: 10px;
-  font-size: 15px;
-  font-weight: 700;
-  cursor: pointer;
-  font-family: 'Noto Sans JP', sans-serif;
-  white-space: nowrap;
-  transition: background .15s;
-}
-
+.search-row input::placeholder { color: #c0c8d8; font-family: 'Noto Sans JP', sans-serif; font-size: 14px; }
+.type-row { display: flex; gap: 8px; margin-top: 12px; }
+.type-btn { padding: 7px 16px; border-radius: 20px; border: 1.5px solid var(--border); background: white; font-size: 13px; font-weight: 500; cursor: pointer; font-family: 'Noto Sans JP', sans-serif; color: var(--text2); transition: all .15s; }
+.type-btn.active { background: var(--accent); border-color: var(--accent); color: white; }
+.btn-search { padding: 12px 24px; background: var(--accent); color: white; border: none; border-radius: 10px; font-size: 15px; font-weight: 700; cursor: pointer; font-family: 'Noto Sans JP', sans-serif; white-space: nowrap; }
 .btn-search:hover { background: #1648c8; }
 .btn-search:active { transform: scale(.98); }
 
-.loading {
-  text-align: center;
-  padding: 48px;
-  color: var(--text2);
-  font-size: 14px;
-  display: none;
-}
-
-.spinner {
-  width: 40px;
-  height: 40px;
-  border: 3px solid var(--border);
-  border-top-color: var(--accent);
-  border-radius: 50%;
-  animation: spin .8s linear infinite;
-  margin: 0 auto 16px;
-}
-
+.loading { text-align: center; padding: 48px; color: var(--text2); font-size: 14px; display: none; }
+.spinner { width: 40px; height: 40px; border: 3px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin .8s linear infinite; margin: 0 auto 16px; }
 @keyframes spin { to { transform: rotate(360deg); } }
 
 .result { display: none; }
+.profile-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 20px 24px; margin-bottom: 16px; display: flex; align-items: center; gap: 16px; }
+.avatar { width: 52px; height: 52px; background: var(--accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 18px; font-weight: 700; font-family: 'DM Mono', monospace; flex-shrink: 0; }
+.profile-info .name { font-size: 18px; font-weight: 700; }
+.profile-info .meta { font-size: 13px; color: var(--text2); margin-top: 3px; }
 
-.profile-card {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 20px 24px;
-  margin-bottom: 16px;
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
-
-.avatar {
-  width: 52px;
-  height: 52px;
-  background: var(--accent);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  font-size: 18px;
-  font-weight: 700;
-  font-family: 'DM Mono', monospace;
-  flex-shrink: 0;
-}
-
-.profile-info .name {
-  font-size: 18px;
-  font-weight: 700;
-}
-
-.profile-info .meta {
-  font-size: 13px;
-  color: var(--text2);
-  margin-top: 3px;
-}
-
-.stats {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
-  margin-bottom: 16px;
-}
-
-.stat {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 14px 12px;
-  text-align: center;
-}
-
-.stat .lbl {
-  font-size: 11px;
-  color: var(--text2);
-  margin-bottom: 6px;
-  font-weight: 500;
-}
-
-.stat .val {
-  font-size: 22px;
-  font-weight: 700;
-  font-family: 'DM Mono', monospace;
-}
-
+.stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 16px; }
+.stat { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 14px 12px; text-align: center; }
+.stat .lbl { font-size: 11px; color: var(--text2); margin-bottom: 6px; font-weight: 500; }
+.stat .val { font-size: 22px; font-weight: 700; font-family: 'DM Mono', monospace; }
 .val.up { color: var(--up); }
 .val.dn { color: var(--down); }
 
-.card {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 20px 24px;
-  margin-bottom: 16px;
-}
+.card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 20px 24px; margin-bottom: 16px; }
+.card-title { font-size: 12px; font-weight: 700; color: var(--text2); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 14px; }
 
-.card-title {
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--text2);
-  text-transform: uppercase;
-  letter-spacing: .08em;
-  margin-bottom: 16px;
-}
+.range-btns { display: flex; gap: 6px; margin-bottom: 14px; }
+.range-btn { padding: 6px 14px; border-radius: 8px; border: 1px solid var(--border); background: white; font-size: 12px; font-weight: 500; cursor: pointer; font-family: 'Noto Sans JP', sans-serif; color: var(--text2); transition: all .15s; }
+.range-btn.active { background: var(--hdr); border-color: var(--hdr); color: white; }
+.range-btn:hover:not(.active) { background: var(--bg); }
 
-.chart-wrap {
-  position: relative;
-  width: 100%;
-  height: 240px;
-  touch-action: none;
-}
+.slider-area { margin-bottom: 14px; }
+.slider-labels { display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 8px; gap: 8px; }
+.slider-labels span { background: #eff4ff; color: var(--accent); padding: 3px 10px; border-radius: 6px; font-weight: 500; font-family: 'DM Mono', monospace; white-space: nowrap; }
 
-.chart-toolbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 10px;
-  flex-wrap: wrap;
-}
+.dual-slider-wrap { position: relative; height: 36px; display: flex; align-items: center; }
+.slider-track { position: absolute; left: 0; right: 0; height: 4px; background: var(--border); border-radius: 2px; }
+.slider-fill { position: absolute; height: 4px; background: var(--accent); border-radius: 2px; }
+.dual-slider-wrap input[type=range] { position: absolute; width: 100%; height: 4px; appearance: none; -webkit-appearance: none; background: transparent; pointer-events: none; outline: none; }
+.dual-slider-wrap input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 24px; height: 24px; border-radius: 50%; background: white; border: 2.5px solid var(--accent); cursor: pointer; pointer-events: all; box-shadow: 0 1px 4px rgba(0,0,0,.15); }
+.dual-slider-wrap input[type=range]::-moz-range-thumb { width: 24px; height: 24px; border-radius: 50%; background: white; border: 2.5px solid var(--accent); cursor: pointer; pointer-events: all; box-shadow: 0 1px 4px rgba(0,0,0,.15); }
 
-.range-btns {
-  display: flex;
-  gap: 6px;
-  flex-wrap: wrap;
-}
+.nav-btns { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; }
+.nav-btn { padding: 7px 16px; border: 1px solid var(--border); border-radius: 8px; background: white; font-size: 13px; cursor: pointer; color: var(--text2); font-family: 'Noto Sans JP', sans-serif; transition: all .15s; }
+.nav-btn:hover { background: var(--bg); }
+.nav-btn:active { transform: scale(.97); }
+.nav-center { font-size: 12px; color: var(--text2); font-family: 'DM Mono', monospace; }
 
-.range-btn {
-  padding: 6px 12px;
-  border-radius: 10px;
-  border: 1px solid var(--border);
-  background: white;
-  font-size: 12px;
-  cursor: pointer;
-  font-family: 'Noto Sans JP', sans-serif;
-  color: var(--text2);
-  transition: all .15s;
-}
+.chart-wrap { position: relative; width: 100%; height: 240px; margin-top: 16px; }
 
-.range-btn.active {
-  background: var(--hdr);
-  border-color: var(--hdr);
-  color: white;
-}
+.filter-row { display: flex; gap: 6px; margin-bottom: 14px; flex-wrap: wrap; }
+.filter-btn { padding: 5px 14px; border-radius: 20px; border: 1px solid var(--border); background: white; font-size: 12px; font-weight: 500; cursor: pointer; font-family: 'Noto Sans JP', sans-serif; color: var(--text2); transition: all .15s; }
+.filter-btn.active { background: var(--hdr); border-color: var(--hdr); color: white; }
 
-.filter-row {
-  display: flex;
-  gap: 8px;
-  margin-bottom: 14px;
-  flex-wrap: wrap;
-}
-
-.filter-btn {
-  padding: 5px 14px;
-  border-radius: 20px;
-  border: 1px solid var(--border);
-  background: white;
-  font-size: 12px;
-  font-weight: 500;
-  cursor: pointer;
-  font-family: 'Noto Sans JP', sans-serif;
-  color: var(--text2);
-  transition: all .15s;
-}
-
-.filter-btn.active {
-  background: var(--hdr);
-  border-color: var(--hdr);
-  color: white;
-}
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 13px;
-}
-
-th {
-  padding: 8px 12px;
-  text-align: left;
-  color: var(--text2);
-  font-weight: 500;
-  border-bottom: 1px solid var(--border);
-  background: #f8fafc;
-  white-space: nowrap;
-}
-
-td {
-  padding: 9px 12px;
-  border-bottom: 1px solid #f1f5f9;
-  font-family: 'DM Mono', monospace;
-  font-size: 13px;
-}
-
-td.name-col {
-  font-family: 'Noto Sans JP', sans-serif;
-  font-size: 12px;
-  color: var(--text);
-}
-
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+th { padding: 8px 12px; text-align: left; color: var(--text2); font-weight: 500; border-bottom: 1px solid var(--border); background: #f8fafc; white-space: nowrap; }
+td { padding: 9px 12px; border-bottom: 1px solid #f1f5f9; font-family: 'DM Mono', monospace; font-size: 13px; }
+td.name-col { font-family: 'Noto Sans JP', sans-serif; font-size: 12px; }
 tr:last-child td { border-bottom: none; }
-
 .du { color: var(--up); font-weight: 500; }
 .dd { color: var(--down); font-weight: 500; }
 .dz { color: var(--text2); }
 
-.empty {
-  text-align: center;
-  padding: 48px 20px;
-  color: var(--text2);
-  font-size: 14px;
-}
-
+.not-found { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 48px 24px; text-align: center; color: var(--text2); font-size: 14px; display: none; }
+.empty { text-align: center; padding: 48px 20px; color: var(--text2); font-size: 14px; }
 .empty-icon { font-size: 48px; margin-bottom: 16px; }
-
-.not-found {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 48px 24px;
-  text-align: center;
-  color: var(--text2);
-  font-size: 14px;
-  display: none;
-}
-
 .ox { overflow-x: auto; }
 
 @media (max-width: 480px) {
-  .stats { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .stats { gap: 8px; }
   .stat .val { font-size: 18px; }
-  .profile-card { gap: 12px; }
   .avatar { width: 44px; height: 44px; font-size: 15px; }
 }
 </style>
 </head>
-
 <body>
 
 <header>
@@ -409,8 +126,7 @@ tr:last-child td { border-bottom: none; }
   <div class="search-card">
     <h2>会員番号で検索</h2>
     <div class="search-row">
-      <input type="text" id="search-input" placeholder="会員番号を入力（例: 0000001）"
-        inputmode="numeric" onkeydown="if(event.key==='Enter')doSearch()">
+      <input type="text" id="search-input" placeholder="会員番号を入力（例: 1800114）" inputmode="numeric">
       <button class="btn-search" onclick="doSearch()">検索</button>
     </div>
     <div class="type-row">
@@ -439,34 +155,39 @@ tr:last-child td { border-bottom: none; }
     </div>
 
     <div class="stats">
-      <div class="stat">
-        <div class="lbl">現在のポイント</div>
-        <div class="val" id="stat-cur">—</div>
-      </div>
-      <div class="stat">
-        <div class="lbl">最高ポイント</div>
-        <div class="val" id="stat-best">—</div>
-      </div>
-      <div class="stat">
-        <div class="lbl">前回比</div>
-        <div class="val" id="stat-diff">—</div>
-      </div>
+      <div class="stat"><div class="lbl">現在のポイント</div><div class="val" id="stat-cur">—</div></div>
+      <div class="stat"><div class="lbl">最高ポイント</div><div class="val" id="stat-best">—</div></div>
+      <div class="stat"><div class="lbl">前回比</div><div class="val" id="stat-diff">—</div></div>
     </div>
 
     <div class="card">
       <div class="card-title">ポイント推移</div>
 
-      <div class="chart-toolbar">
-        <div class="range-btns">
-          <button class="range-btn active" id="btn-all" onclick="setRange('all')">全期間</button>
-          <button class="range-btn" id="btn-1y" onclick="setRange('1y')">1年</button>
-          <button class="range-btn" id="btn-6m" onclick="setRange('6m')">半年</button>
+      <div class="range-btns">
+        <button class="range-btn active" id="btn-all" onclick="setPreset(0, this)">全期間</button>
+        <button class="range-btn" onclick="setPreset(12, this)">1年</button>
+        <button class="range-btn" onclick="setPreset(6, this)">半年</button>
+      </div>
+
+      <div class="slider-area">
+        <div class="slider-labels">
+          <span id="label-start">—</span>
+          <span id="label-end">—</span>
+        </div>
+        <div class="dual-slider-wrap">
+          <div class="slider-track"></div>
+          <div class="slider-fill" id="slider-fill"></div>
+          <input type="range" id="slider-start" min="0" max="100" value="0">
+          <input type="range" id="slider-end" min="0" max="100" value="100">
+        </div>
+        <div class="nav-btns">
+          <button class="nav-btn" onclick="shiftRange(-1)">◀ 前へ</button>
+          <div class="nav-center" id="nav-count"></div>
+          <button class="nav-btn" onclick="shiftRange(1)">次へ ▶</button>
         </div>
       </div>
 
-      <div class="chart-wrap">
-        <canvas id="chart"></canvas>
-      </div>
+      <div class="chart-wrap"><canvas id="chart"></canvas></div>
     </div>
 
     <div class="card">
@@ -474,9 +195,7 @@ tr:last-child td { border-bottom: none; }
       <div class="filter-row" id="filter-row"></div>
       <div class="ox">
         <table>
-          <thead>
-            <tr><th>日付</th><th>大会名</th><th>ポイント</th><th>前回比</th></tr>
-          </thead>
+          <thead><tr><th>日付</th><th>大会名</th><th>ポイント</th><th>前回比</th></tr></thead>
           <tbody id="table-body"></tbody>
         </table>
       </div>
@@ -494,8 +213,10 @@ const API_URL = 'https://script.google.com/macros/s/AKfycbzrn4cNnURO-x5pUVAT89_s
 
 let currentType = 'takkyu';
 let allData = [];
+let filteredData = [];
 let chartInstance = null;
-let activeFilter = 'all';
+let sliderStart = 0;
+let sliderEnd = 0;
 
 function setType(type, btn) {
   currentType = type;
@@ -503,45 +224,39 @@ function setType(type, btn) {
   btn.classList.add('active');
 }
 
+function hideAll() {
+  ['loading','result','not-found','empty-state'].forEach(id => {
+    document.getElementById(id).style.display = 'none';
+  });
+}
+
 async function doSearch() {
   const id = document.getElementById('search-input').value.trim();
   if (!id) return;
 
   allData = [];
-  activeFilter = 'all';
+  filteredData = [];
+  if (chartInstance) { chartInstance.destroy(); chartInstance = null; }
 
-  if (chartInstance) {
-    chartInstance.destroy();
-    chartInstance = null;
-  }
-
-  document.getElementById('table-body').innerHTML = "";
-  document.getElementById('filter-row').innerHTML = "";
-
+  hideAll();
   document.getElementById('loading').style.display = 'block';
-  document.getElementById('result').style.display = 'none';
-  document.getElementById('not-found').style.display = 'none';
-  document.getElementById('empty-state').style.display = 'none';
 
   try {
-    const url = `${API_URL}?id=${encodeURIComponent(id)}&type=${currentType}`;
-    const res = await fetch(url);
+    const res = await fetch(`${API_URL}?id=${encodeURIComponent(id)}&type=${currentType}`);
     const data = await res.json();
+    hideAll();
 
-    document.getElementById('loading').style.display = 'none';
-
-    if (!data || data.length === 0) {
-      document.getElementById('result').style.display = 'none';
+    if (!Array.isArray(data) || data.length === 0) {
       document.getElementById('not-found').style.display = 'block';
       return;
     }
 
     allData = data;
+    filteredData = data;
     renderResult(id, data);
 
   } catch(e) {
-    document.getElementById('loading').style.display = 'none';
-    document.getElementById('result').style.display = 'none';
+    hideAll();
     document.getElementById('not-found').style.display = 'block';
   }
 }
@@ -550,7 +265,6 @@ function renderResult(id, data) {
   const cur = data[data.length - 1]['レイティング'];
   const best = Math.max(...data.map(d => d['レイティング']));
   const last = data.length >= 2 ? cur - data[data.length - 2]['レイティング'] : null;
-
   const diffTxt = last === null ? '—' : (last > 0 ? '+' + last : String(last));
   const diffCls = last === null ? '' : (last > 0 ? 'up' : last < 0 ? 'dn' : '');
 
@@ -558,58 +272,157 @@ function renderResult(id, data) {
   document.getElementById('player-id').textContent = '会員番号 ' + id;
   document.getElementById('player-meta').textContent =
     data.length + '大会参加 / ' + (currentType === 'takkyu' ? '硬式' : 'ラージ');
-
   document.getElementById('stat-cur').textContent = cur.toLocaleString();
   document.getElementById('stat-best').textContent = best.toLocaleString();
-
   const diffEl = document.getElementById('stat-diff');
   diffEl.textContent = diffTxt;
   diffEl.className = 'val ' + diffCls;
 
   const types = ['all', ...new Set(data.map(d => d['種別']))];
-  const filterRow = document.getElementById('filter-row');
-
-  filterRow.innerHTML = types.map(t =>
-    `<button class="filter-btn ${t === 'all' ? 'active' : ''}"
-      onclick="applyFilter('${t}', this)">${t === 'all' ? 'すべて' : t}</button>`
+  document.getElementById('filter-row').innerHTML = types.map(t =>
+    `<button class="filter-btn ${t === 'all' ? 'active' : ''}" onclick="applyFilter('${t}', this)">${t === 'all' ? 'すべて' : t}</button>`
   ).join('');
 
-  activeFilter = 'all';
-
+  initSlider(data.length);
   renderChart(data);
   renderTable(data);
 
-  setRange('all');
+  // 全期間ボタンをアクティブに
+  document.querySelectorAll('.range-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('btn-all').classList.add('active');
 
   document.getElementById('result').style.display = 'block';
 }
 
 function applyFilter(type, btn) {
-  activeFilter = type;
   document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
+  filteredData = type === 'all' ? allData : allData.filter(d => d['種別'] === type);
+  initSlider(filteredData.length);
+  renderChart(filteredData);
+  renderTable(filteredData);
+  document.querySelectorAll('.range-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('btn-all').classList.add('active');
+}
 
-  const filtered = type === 'all' ? allData : allData.filter(d => d['種別'] === type);
+// ===== スライダー =====
+function initSlider(total) {
+  const s = document.getElementById('slider-start');
+  const e = document.getElementById('slider-end');
+  s.min = 0; s.max = total - 1; s.value = 0;
+  e.min = 0; e.max = total - 1; e.value = total - 1;
+  sliderStart = 0;
+  sliderEnd = total - 1;
+  updateSliderUI();
 
-  renderChart(filtered);
-  renderTable(filtered);
+  s.oninput = () => {
+    sliderStart = Math.min(parseInt(s.value), sliderEnd - 1);
+    s.value = sliderStart;
+    document.querySelectorAll('.range-btn').forEach(b => b.classList.remove('active'));
+    onSliderChange();
+  };
+  e.oninput = () => {
+    sliderEnd = Math.max(parseInt(e.value), sliderStart + 1);
+    e.value = sliderEnd;
+    document.querySelectorAll('.range-btn').forEach(b => b.classList.remove('active'));
+    onSliderChange();
+  };
+}
 
-  setRange('all');
+function onSliderChange() {
+  updateSliderUI();
+  updateChart();
+}
+
+function updateSliderUI() {
+  const data = filteredData;
+  if (!data.length) return;
+  const total = data.length;
+
+  document.getElementById('label-start').textContent = data[sliderStart]?.['日付'] || '—';
+  document.getElementById('label-end').textContent = data[sliderEnd]?.['日付'] || '—';
+
+  const pct = v => (v / Math.max(total - 1, 1)) * 100;
+  const fill = document.getElementById('slider-fill');
+  fill.style.left = pct(sliderStart) + '%';
+  fill.style.width = (pct(sliderEnd) - pct(sliderStart)) + '%';
+
+  const count = sliderEnd - sliderStart + 1;
+  document.getElementById('nav-count').textContent = count + '大会 表示中';
+}
+
+function updateChart() {
+  if (!chartInstance || !filteredData.length) return;
+  const visible = filteredData.slice(sliderStart, sliderEnd + 1);
+  chartInstance.data.labels = visible.map(d => d['日付']);
+  chartInstance.data.datasets[0].data = visible.map(d => d['レイティング']);
+  chartInstance.update();
+}
+
+function setPreset(months, btn) {
+  document.querySelectorAll('.range-btn').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+
+  const data = filteredData;
+  if (!data.length) return;
+
+  if (months === 0) {
+    sliderStart = 0;
+    sliderEnd = data.length - 1;
+  } else {
+    const latest = new Date(data[data.length - 1]['日付']);
+    const limit = new Date(latest);
+    limit.setMonth(limit.getMonth() - months);
+    const limitStr = limit.toISOString().split('T')[0];
+    let idx = data.findIndex(d => d['日付'] >= limitStr);
+    if (idx === -1) idx = 0;
+    sliderStart = idx;
+    sliderEnd = data.length - 1;
+  }
+
+  document.getElementById('slider-start').value = sliderStart;
+  document.getElementById('slider-end').value = sliderEnd;
+  updateSliderUI();
+  updateChart();
+}
+
+function shiftRange(dir) {
+  const data = filteredData;
+  if (!data.length) return;
+  const span = sliderEnd - sliderStart;
+  const step = Math.max(1, Math.floor(span * 0.5));
+
+  let ns = sliderStart + dir * step;
+  let ne = sliderEnd + dir * step;
+
+  if (ns < 0) { ne -= ns; ns = 0; }
+  if (ne > data.length - 1) { ns -= (ne - (data.length - 1)); ne = data.length - 1; }
+  ns = Math.max(0, ns);
+
+  sliderStart = ns;
+  sliderEnd = ne;
+  document.getElementById('slider-start').value = sliderStart;
+  document.getElementById('slider-end').value = sliderEnd;
+  updateSliderUI();
+  updateChart();
+  document.querySelectorAll('.range-btn').forEach(b => b.classList.remove('active'));
 }
 
 function renderChart(data) {
   if (chartInstance) chartInstance.destroy();
+  const visible = data.slice(sliderStart, sliderEnd + 1);
 
   chartInstance = new Chart(document.getElementById('chart'), {
     type: 'line',
     data: {
-      labels: data.map(d => d['日付']),
+      labels: visible.map(d => d['日付']),
       datasets: [{
-        data: data.map(d => d['レイティング']),
+        data: visible.map(d => d['レイティング']),
         borderColor: '#1a56db',
         backgroundColor: 'rgba(26,86,219,0.07)',
         pointBackgroundColor: '#1a56db',
         pointRadius: 4,
+        pointHoverRadius: 7,
         fill: true,
         tension: 0.3
       }]
@@ -617,91 +430,38 @@ function renderChart(data) {
     options: {
       responsive: true,
       maintainAspectRatio: false,
-
       plugins: {
         legend: { display: false },
-        zoom: {
-          pan: { enabled: true, mode: 'x' },
-          zoom: {
-            wheel: { enabled: true },
-            drag: { enabled: true },
-            pinch: { enabled: true },   // ★ iPhone ピンチズーム有効
-            mode: 'x'
+        tooltip: {
+          callbacks: {
+            title: ctx => ctx[0].label,
+            label: ctx => ' ' + ctx.parsed.y.toLocaleString() + ' pt'
           }
         }
       },
-
       scales: {
         x: {
-          ticks: { color: '#9ca3af', font: { size: 10 }, maxRotation: 45, autoSkip: true, maxTicksLimit: 12 },
-          grid: { color: 'rgba(0,0,0,.05)' }
+          ticks: { color: '#9ca3af', font: { size: 10 }, maxRotation: 45, autoSkip: true, maxTicksLimit: 10 },
+          grid: { color: 'rgba(0,0,0,.04)' }
         },
         y: {
           ticks: { color: '#9ca3af', font: { size: 11 } },
-          grid: { color: 'rgba(0,0,0,.05)' }
+          grid: { color: 'rgba(0,0,0,.04)' }
         }
       }
     }
   });
 }
 
-function parseDate(str) {
-  const [y, m, d] = str.split('-').map(Number);
-  return new Date(y, m - 1, d);
-}
-
-function setRange(range) {
-  document.querySelectorAll('.range-btn').forEach(b => b.classList.remove('active'));
-
-  if (range === 'all') document.getElementById('btn-all').classList.add('active');
-  if (range === '1y') document.getElementById('btn-1y').classList.add('active');
-  if (range === '6m') document.getElementById('btn-6m').classList.add('active');
-
-  if (!chartInstance) return;
-
-  const labels = chartInstance.data.labels;
-  if (!labels || labels.length === 0) return;
-
-  if (range === 'all') {
-    chartInstance.options.scales.x.min = undefined;
-    chartInstance.options.scales.x.max = undefined;
-    chartInstance.update();
-    return;
-  }
-
-  const latestDate = parseDate(labels[labels.length - 1]);
-  const limitDate = new Date(latestDate);
-
-  if (range === '1y') limitDate.setFullYear(limitDate.getFullYear() - 1);
-  if (range === '6m') limitDate.setMonth(limitDate.getMonth() - 6);
-
-  let startIndex = 0;
-  for (let i = 0; i < labels.length; i++) {
-    const dt = parseDate(labels[i]);
-    if (dt >= limitDate) {
-      startIndex = i;
-      break;
-    }
-  }
-
-  chartInstance.options.scales.x.min = labels[startIndex];
-  chartInstance.options.scales.x.max = labels[labels.length - 1];
-  chartInstance.update();
-}
-
 function renderTable(data) {
   const reversed = [...data].reverse();
-  const tbody = document.getElementById('table-body');
-
-  tbody.innerHTML = reversed.map((r, i, arr) => {
+  document.getElementById('table-body').innerHTML = reversed.map((r, i, arr) => {
     const prev = arr[i + 1];
     const dv = prev ? r['レイティング'] - prev['レイティング'] : null;
-
     const dstr = dv === null ? '' :
       dv > 0 ? `<span class="du">+${dv}</span>` :
       dv < 0 ? `<span class="dd">${dv}</span>` :
       `<span class="dz">±0</span>`;
-
     return `<tr>
       <td>${r['日付']}</td>
       <td class="name-col">${r['大会名']}</td>
@@ -715,6 +475,5 @@ document.getElementById('search-input').addEventListener('keydown', e => {
   if (e.key === 'Enter') doSearch();
 });
 </script>
-
 </body>
 </html>
