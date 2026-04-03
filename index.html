@@ -116,7 +116,7 @@ header {
 
 .type-row {
   display: flex;
-  gap: 8px;
+  gap:  8px;
   margin-top: 12px;
 }
 
@@ -303,22 +303,6 @@ header {
   color: white;
 }
 
-.btn-reset {
-  padding: 6px 12px;
-  border-radius: 10px;
-  border: 1px solid var(--border);
-  background: white;
-  font-size: 12px;
-  cursor: pointer;
-  font-family: 'Noto Sans JP', sans-serif;
-  color: var(--text2);
-  transition: all .15s;
-}
-
-.btn-reset:hover {
-  background: #f8fafc;
-}
-
 .filter-row {
   display: flex;
   gap: 8px;
@@ -478,7 +462,6 @@ tr:last-child td { border-bottom: none; }
           <button class="range-btn" id="btn-1y" onclick="setRange('1y')">1年</button>
           <button class="range-btn" id="btn-6m" onclick="setRange('6m')">半年</button>
         </div>
-        <button class="btn-reset" onclick="resetZoom()">全体に戻す</button>
       </div>
 
       <div class="chart-wrap">
@@ -642,7 +625,7 @@ function renderChart(data) {
           zoom: {
             wheel: { enabled: true },
             drag: { enabled: true },
-            pinch: { enabled: false },
+            pinch: { enabled: true },   // ★ iPhone ピンチズーム有効
             mode: 'x'
           }
         }
@@ -662,12 +645,7 @@ function renderChart(data) {
   });
 }
 
-function resetZoom() {
-  if (chartInstance) chartInstance.resetZoom();
-}
-
 function parseDate(str) {
-  // "yyyy-mm-dd" 前提
   const [y, m, d] = str.split('-').map(Number);
   return new Date(y, m - 1, d);
 }
@@ -697,7 +675,6 @@ function setRange(range) {
   if (range === '1y') limitDate.setFullYear(limitDate.getFullYear() - 1);
   if (range === '6m') limitDate.setMonth(limitDate.getMonth() - 6);
 
-  // limitDate以上の最初のインデックスを探す
   let startIndex = 0;
   for (let i = 0; i < labels.length; i++) {
     const dt = parseDate(labels[i]);
