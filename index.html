@@ -81,59 +81,45 @@ header { background: var(--hdr); padding: 20px 24px; display: flex; align-items:
 
 .result { display: none; }
 
-.profile-card {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 20px 24px;
+/* ★ 会員番号＋前回比（独立枠） */
+.top-stats {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 10px;
   margin-bottom: 16px;
 }
 
-.profile-top {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 14px;
+.top-box {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 16px 18px;
 }
 
-.profile-info {
-  flex: 1;
-  min-width: 0;
-}
-
-.profile-info .name {
-  font-size: 18px;
-  font-weight: 700;
-  white-space: nowrap;
-}
-
-.profile-info .meta {
-  font-size: 13px;
-  color: var(--text2);
-  margin-top: 3px;
-}
-
-.profile-diff {
-  text-align: right;
-  flex-shrink: 0;
-}
-
-.profile-diff .diff-lbl {
+.top-lbl {
   font-size: 11px;
   color: var(--text2);
   font-weight: 500;
-  margin-bottom: 4px;
+  margin-bottom: 6px;
 }
 
-.profile-diff .diff-val {
-  font-size: 22px;
+.top-val {
+  font-size: 18px;
   font-weight: 700;
   font-family: 'DM Mono', monospace;
+  color: var(--text);
 }
 
-.profile-diff .diff-val.up { color: var(--up); }
-.profile-diff .diff-val.dn { color: var(--down); }
-.profile-diff .diff-val.dz { color: var(--text2); }
+.top-meta {
+  font-size: 12px;
+  color: var(--text2);
+  margin-top: 4px;
+  font-family: 'Noto Sans JP', sans-serif;
+}
+
+.top-val.up { color: var(--up); }
+.top-val.dn { color: var(--down); }
+.top-val.dz { color: var(--text2); }
 
 .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 16px; }
 .stat { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 14px 12px; text-align: center; }
@@ -211,16 +197,6 @@ tr:last-child td { border-bottom: none; }
 @media (max-width: 480px) {
   .stats { gap: 8px; }
   .stat .val { font-size: 18px; }
-
-  .profile-top {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .profile-diff {
-    text-align: left;
-    margin-top: 10px;
-  }
 }
 </style>
 </head>
@@ -265,17 +241,18 @@ tr:last-child td { border-bottom: none; }
   </div>
 
   <div class="result" id="result">
-    <div class="profile-card" id="profile-card">
-      <div class="profile-top">
-        <div class="profile-info">
-          <div class="name" id="player-id"></div>
-          <div class="meta" id="player-meta"></div>
-        </div>
 
-        <div class="profile-diff">
-          <div class="diff-lbl">前回比</div>
-          <div class="diff-val" id="stat-diff">—</div>
-        </div>
+    <!-- ★ 会員番号と前回比を独立させる -->
+    <div class="top-stats">
+      <div class="top-box" id="profile-card">
+        <div class="top-lbl">会員番号</div>
+        <div class="top-val" id="player-id">—</div>
+        <div class="top-meta" id="player-meta"></div>
+      </div>
+
+      <div class="top-box">
+        <div class="top-lbl">前回比</div>
+        <div class="top-val" id="stat-diff">—</div>
       </div>
     </div>
 
@@ -404,7 +381,7 @@ function renderResult(id, data) {
   const diffTxt = last === null ? '—' : (last > 0 ? '+' + last : String(last));
   const diffCls = last === null ? '' : (last > 0 ? 'up' : last < 0 ? 'dn' : 'dz');
 
-  document.getElementById('player-id').textContent = '会員番号 ' + id;
+  document.getElementById('player-id').textContent = id;
   document.getElementById('player-meta').textContent =
     data.length + '大会参加 / ' + (currentType === 'takkyu' ? '硬式' : 'ラージ');
 
@@ -414,7 +391,7 @@ function renderResult(id, data) {
 
   const diffEl = document.getElementById('stat-diff');
   diffEl.textContent = diffTxt;
-  diffEl.className = 'diff-val ' + diffCls;
+  diffEl.className = 'top-val ' + diffCls;
 
   const types = ['all', ...new Set(data.map(d => d['種別']))];
   document.getElementById('filter-row').innerHTML = types.map(t =>
