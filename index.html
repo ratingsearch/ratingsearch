@@ -33,9 +33,6 @@ header{background:var(--hdr);padding:20px 24px;display:flex;align-items:center;g
 .pong{font-size:32px;animation:pong 1s linear infinite;display:block;margin:0 auto 16px;}
 @keyframes pong{0%{transform:translateY(0)}25%{transform:translateY(-10px)}50%{transform:translateY(0)}75%{transform:translateY(10px)}100%{transform:translateY(0)}}
 .result{display:none;}
-.profile-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px 24px;margin-bottom:16px;display:flex;gap:16px;}
-.profile-info .name{font-size:18px;font-weight:700;}
-.profile-info .meta{font-size:13px;color:var(--text2);margin-top:3px;}
 .stats{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:16px;}
 .stat{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 12px;text-align:center;}
 .stat .lbl{font-size:11px;color:var(--text2);margin-bottom:6px;font-weight:500;}
@@ -44,36 +41,15 @@ header{background:var(--hdr);padding:20px 24px;display:flex;align-items:center;g
 .val.dn{color:var(--down);}
 .card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px 24px;margin-bottom:16px;}
 .card-title{font-size:12px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.08em;margin-bottom:14px;}
-.range-btns{display:flex;gap:6px;margin-bottom:14px;}
-.range-btn{padding:6px 14px;border-radius:8px;border:1px solid var(--border);background:white;font-size:12px;font-weight:500;cursor:pointer;font-family:'Noto Sans JP',sans-serif;color:var(--text2);transition:all .15s;}
-.range-btn.active{background:var(--hdr);border-color:var(--hdr);color:white;}
-.range-btn:hover:not(.active){background:var(--bg);}
-.slider-area{margin-bottom:14px;}
-.slider-labels{display:flex;justify-content:space-between;font-size:11px;margin-bottom:8px;gap:8px;}
-.slider-labels span{background:#eff4ff;color:var(--accent);padding:3px 10px;border-radius:6px;font-weight:500;font-family:'DM Mono',monospace;white-space:nowrap;}
-.dual-slider-wrap{position:relative;height:36px;display:flex;align-items:center;}
-.slider-track{position:absolute;left:0;right:0;height:4px;background:var(--border);border-radius:2px;}
-.slider-fill{position:absolute;height:4px;background:var(--accent);border-radius:2px;}
-.dual-slider-wrap input[type=range]{position:absolute;width:100%;height:4px;appearance:none;-webkit-appearance:none;background:transparent;pointer-events:none;outline:none;}
-.dual-slider-wrap input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:24px;height:24px;border-radius:50%;background:white;border:2.5px solid var(--accent);cursor:pointer;pointer-events:all;box-shadow:0 1px 4px rgba(0,0,0,.15);}
-.dual-slider-wrap input[type=range]::-moz-range-thumb{width:24px;height:24px;border-radius:50%;background:white;border:2.5px solid var(--accent);cursor:pointer;pointer-events:all;box-shadow:0 1px 4px rgba(0,0,0,.15);}
-.nav-btns{display:flex;justify-content:space-between;align-items:center;margin-top:10px;}
-.nav-btn{padding:7px 16px;border:1px solid var(--border);border-radius:8px;background:white;font-size:13px;cursor:pointer;color:var(--text2);font-family:'Noto Sans JP',sans-serif;transition:all .15s;}
-.nav-btn:hover{background:var(--bg);}
-.nav-btn:active{transform:scale(.97);}
-.nav-center{font-size:12px;color:var(--text2);font-family:'DM Mono',monospace;}
-.chart-wrap{position:relative;width:100%;height:240px;margin-top:16px;}
 .filter-row{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap;}
 .filter-btn{padding:5px 14px;border-radius:20px;border:1px solid var(--border);background:white;font-size:12px;font-weight:500;cursor:pointer;font-family:'Noto Sans JP',sans-serif;color:var(--text2);transition:all .15s;}
 .filter-btn.active{background:var(--hdr);border-color:var(--hdr);color:white;}
+.chart-wrap{position:relative;width:100%;height:240px;margin-top:16px;}
 table{width:100%;border-collapse:collapse;font-size:13px;}
 th{padding:8px 12px;text-align:left;color:var(--text2);font-weight:500;border-bottom:1px solid var(--border);background:#f8fafc;white-space:nowrap;}
 td{padding:9px 12px;border-bottom:1px solid #f1f5f9;font-family:'DM Mono',monospace;font-size:13px;}
 td.name-col{font-family:'Noto Sans JP',sans-serif;font-size:12px;}
 tr:last-child td{border-bottom:none;}
-.du{color:var(--up);font-weight:500;}
-.dd{color:var(--down);font-weight:500;}
-.dz{color:var(--text2);}
 .not-found,.fetch-error{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:48px 24px;text-align:center;color:var(--text2);font-size:14px;display:none;}
 .empty{text-align:center;padding:48px 20px;color:var(--text2);font-size:14px;}
 .empty-icon{font-size:48px;margin-bottom:16px;}
@@ -136,11 +112,10 @@ tr:last-child td{border-bottom:none;}
       </div>
     </div>
   </div>
-
 </div>
 
 <script>
-const API_URL = 'https://script.google.com/macros/s/AKfycbzrn4cNnURO-x5pUVAT89_smrPQmPe8TzNNpD_4CO4SMj9QD7j9iPobbIggYU08NAhD9A/exec';
+const API_URL = 'https://script.google.com/macros/s/YOUR_API_HERE/exec';
 let currentType='takkyu';
 let data1=[], data2=[];
 let chartInstance=null;
@@ -165,6 +140,7 @@ async function doSearch(){
   btn.disabled=true;
   const id1=document.getElementById('search-input').value.trim();
   const id2=document.getElementById('compare-input').value.trim();
+
   if(!id1){btn.disabled=false;return;}
 
   data1=[]; data2=[];
@@ -189,7 +165,7 @@ async function doSearch(){
       btn.disabled=false;
       return;
     }
-    renderResult(id1, id2);
+    renderResult(id1,id2);
     document.getElementById('result').scrollIntoView({behavior:'smooth', block:'start'});
   }catch(e){
     hideAll();
@@ -233,4 +209,34 @@ function renderChartCompare(){
     return item?item['レイティング']:null;
   });
   const ds=[];
-  if(data1.length) ds.push({label:'会員1', data:getData(data1), borderColor:'#1a
+  if(data1.length) ds.push({label:'会員1', data:getData(data1), borderColor:'#1a56db', tension:0.2, spanGaps:true});
+  if(data2.length) ds.push({label:'会員2', data:getData(data2), borderColor:'#e02424', tension:0.2, spanGaps:true});
+
+  const ctx=document.getElementById('chart').getContext('2d');
+  chartInstance=new Chart(ctx,{type:'line',data:{labels:dates,datasets:ds},options:{
+    responsive:true,
+    plugins:{legend:{position:'top'}},
+    interaction:{mode:'nearest',intersect:false},
+    scales:{x:{title:{display:true,text:'日付'}},y:{title:{display:true,text:'レイティング'}}}
+  }});
+}
+
+function renderTableCompare(){
+  const tbody=document.getElementById('table-body');
+  tbody.innerHTML='';
+  const allDates=new Set([...data1,...data2].map(d=>d['日付']));
+  const dates=[...allDates].sort();
+  dates.forEach(date=>{
+    const row=document.createElement('tr');
+    const d1=data1.find(x=>x['日付']===date);
+    const d2=data2.find(x=>x['日付']===date);
+    const tdDate=document.createElement('td'); tdDate.textContent=date; row.appendChild(tdDate);
+    const tdName=document.createElement('td'); tdName.textContent=(d1?.大会名||d2?.大会名||'—'); row.appendChild(tdName);
+    const td1=document.createElement('td'); td1.textContent=d1?d1['レイティング']:'—'; row.appendChild(td1);
+    const td2=document.createElement('td'); td2.textContent=d2?d2['レイティング']:'—'; row.appendChild(td2);
+    tbody.appendChild(row);
+  });
+}
+</script>
+</body>
+</html>
