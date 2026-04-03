@@ -213,17 +213,24 @@ tr:last-child td { border-bottom: none; }
 
   <div class="result" id="result">
     <div class="profile-card" id="profile-card">
-      <div class="profile-info">
-        <div class="name" id="player-id"></div>
-        <div class="meta" id="player-meta"></div>
-      </div>
+　  <div class="profile-top">
+    <div class="profile-info">
+      <div class="name" id="player-id"></div>
+      <div class="meta" id="player-meta"></div>
     </div>
 
-    <div class="stats">
-      <div class="stat"><div class="lbl">現在のポイント</div><div class="val" id="stat-cur">—</div></div>
-      <div class="stat"><div class="lbl">最高ポイント</div><div class="val" id="stat-best">—</div></div>
-      <div class="stat"><div class="lbl">前回比</div><div class="val" id="stat-diff">—</div></div>
+    <div class="profile-diff">
+      <div class="diff-lbl">前回比</div>
+      <div class="diff-val" id="stat-diff">—</div>
     </div>
+  </div>
+</div>
+
+    <div class="stats">
+  <div class="stat"><div class="lbl">現在のポイント</div><div class="val" id="stat-cur">—</div></div>
+  <div class="stat"><div class="lbl">最高ポイント</div><div class="val" id="stat-best">—</div></div>
+  <div class="stat"><div class="lbl">最低ポイント</div><div class="val" id="stat-worst">—</div></div>
+  </div>
 
     <div class="card">
       <div class="card-title">ポイント推移</div>
@@ -338,6 +345,7 @@ async function doSearch() {
 function renderResult(id, data) {
   const cur = data[data.length - 1]['レイティング'];
   const best = Math.max(...data.map(d => d['レイティング']));
+  const worst = Math.min(...data.map(d => d['レイティング']));
   const last = data.length >= 2 ? cur - data[data.length - 2]['レイティング'] : null;
   const diffTxt = last === null ? '—' : (last > 0 ? '+' + last : String(last));
   const diffCls = last === null ? '' : (last > 0 ? 'up' : last < 0 ? 'dn' : '');
@@ -348,10 +356,11 @@ function renderResult(id, data) {
 
   document.getElementById('stat-cur').textContent = cur.toLocaleString();
   document.getElementById('stat-best').textContent = best.toLocaleString();
+  document.getElementById('stat-worst').textContent = worst.toLocaleString();
 
   const diffEl = document.getElementById('stat-diff');
   diffEl.textContent = diffTxt;
-  diffEl.className = 'val ' + diffCls;
+  diffEl.className = 'diff-val ' + diffCls;
 
   const types = ['all', ...new Set(data.map(d => d['種別']))];
   document.getElementById('filter-row').innerHTML = types.map(t =>
@@ -384,6 +393,34 @@ function applyFilter(type, btn) {
   document.querySelectorAll('.range-btn').forEach(b => b.classList.remove('active'));
   document.getElementById('btn-all').classList.add('active');
 }
+
+ .profile-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 14px;
+}
+
+.profile-diff {
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.profile-diff .diff-lbl {
+  font-size: 11px;
+  color: var(--text2);
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.profile-diff .diff-val {
+  font-size: 22px;
+  font-weight: 700;
+  font-family: 'DM Mono', monospace;
+}
+
+.profile-diff .diff-val.up { color: var(--up); }
+.profile-diff .diff-val.dn { color: var(--down); } 
 
 // ===== スライダー =====
 function initSlider(total) {
