@@ -92,12 +92,26 @@ header { background: var(--hdr); padding: 20px 24px; display: flex; align-items:
 .profile-top {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
   gap: 14px;
 }
 
-.profile-info .name { font-size: 18px; font-weight: 700; }
-.profile-info .meta { font-size: 13px; color: var(--text2); margin-top: 3px; }
+.profile-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.profile-info .name {
+  font-size: 18px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.profile-info .meta {
+  font-size: 13px;
+  color: var(--text2);
+  margin-top: 3px;
+}
 
 .profile-diff {
   text-align: right;
